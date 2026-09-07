@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WhatsApp</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111b21">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  html, body { height:100%; overflow:hidden; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background:
+      radial-gradient(ellipse at 20% 15%, rgba(120,70,30,.35) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 85%, rgba(40,60,90,.4) 0%, transparent 55%),
+      linear-gradient(165deg, #1a1410 0%, #0d0f14 45%, #12100c 100%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    color:#fff;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+
+  /* Status bar finta */
+  .statusbar {
+    width:100%;
+    padding:10px 18px 0;
+    padding-top:max(10px, env(safe-area-inset-top));
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13px;
+    font-weight:500;
+    color:rgba(255,255,255,.9);
+    flex-shrink:0;
+  }
+
+  .status-right { display:flex; gap:6px; align-items:center; font-size:12px; }
+
+  /* Orologio grande */
+  .clock-area {
+    margin-top:16vh;
+    text-align:center;
+    flex-shrink:0;
+  }
+
+  .clock {
+    font-size:66px;
+    font-weight:200;
+    letter-spacing:-2px;
+    line-height:1;
+    text-shadow:0 2px 16px rgba(0,0,0,.5);
+  }
+
+  .date {
+    font-size:15px;
+    font-weight:400;
+    margin-top:8px;
+    color:rgba(255,255,255,.75);
+    text-shadow:0 1px 8px rgba(0,0,0,.5);
+  }
+
+  /* Area icona */
+  .icon-area {
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+  }
+
+  .app {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:9px;
+    cursor:pointer;
+    text-decoration:none;
+    position:relative;
+    transition:transform .12s ease;
+  }
+
+  .app:active { transform:scale(.9); }
+
+  .icon-wrap {
+    width:68px;
+    height:68px;
+    border-radius:17px;
+    overflow:hidden;
+    position:relative;
+    box-shadow:0 6px 18px rgba(0,0,0,.45);
+  }
+
+  .app-label {
+    font-size:12.5px;
+    color:#fff;
+    text-shadow:0 1px 4px rgba(0,0,0,.8);
+    font-weight:400;
+  }
+
+  /* Badge notifica */
+  .badge {
+    position:absolute;
+    top:-4px;
+    right:-4px;
+    min-width:22px;
+    height:22px;
+    border-radius:11px;
+    background:#e63946;
+    color:#fff;
+    font-size:12px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0 6px;
+    border:2px solid rgba(13,15,20,.9);
+    z-index:2;
+  }
+
+  /* Barra gesture in fondo */
+  .gesture-bar {
+    width:100%;
+    display:flex;
+    justify-content:center;
+    padding-bottom:max(10px, env(safe-area-inset-bottom));
+    padding-top:10px;
+    flex-shrink:0;
+  }
+
+  .gesture-pill {
+    width:120px;
+    height:4px;
+    border-radius:2px;
+    background:rgba(255,255,255,.35);
+  }
+</style>
+</head>
+<body>
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <div id="sb-time">07:14</div>
+    <div class="status-right">
+      <span>▮▮▮</span>
+      <span>◗</span>
+      <span>78%</span>
+    </div>
+  </div>
+
+  <!-- Orologio -->
+  <div class="clock-area">
+    <div class="clock" id="clock">07:14</div>
+    <div class="date" id="date">sabato, 5 settembre</div>
+  </div>
+
+  <!-- Icona WhatsApp -->
+  <div class="icon-area">
+    <a class="app" href="index.html">
+      <div class="icon-wrap">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="68" height="68">
+          <rect width="100" height="100" fill="#25D366"/>
+          <path fill="#FFFFFF" d="M71.2 28.6c-5.6-5.6-13.1-8.7-21-8.7-16.3 0-29.6 13.3-29.6 29.6 0 5.2 1.4 10.3 4 14.8L20.3 80l16.1-4.2c4.3 2.3 9.1 3.6 14 3.6h.1c16.3 0 29.6-13.3 29.6-29.6 0-7.9-3.1-15.3-8.7-20.9v-.3zM50.4 74.4c-4.4 0-8.7-1.2-12.5-3.4l-.9-.5-9.3 2.4 2.5-9.1-.6-.9c-2.4-3.9-3.7-8.4-3.7-13 0-13.5 11-24.6 24.6-24.6 6.6 0 12.7 2.6 17.4 7.2 4.6 4.7 7.2 10.8 7.2 17.4-.1 13.6-11.1 24.5-24.7 24.5zm13.5-18.4c-.7-.4-4.4-2.2-5-2.4-.7-.2-1.2-.4-1.7.4-.5.7-1.9 2.4-2.4 2.9-.4.5-.9.6-1.6.2-.7-.4-3.1-1.2-6-3.7-2.2-2-3.7-4.4-4.2-5.2-.4-.7 0-1.1.3-1.5.3-.3.7-.9 1.1-1.3.4-.4.5-.7.7-1.2.2-.5.1-.9-.1-1.3-.2-.4-1.7-4-2.3-5.5-.6-1.4-1.2-1.2-1.7-1.3-.4 0-.9 0-1.4 0s-1.3.2-2 .9c-.7.7-2.6 2.6-2.6 6.3s2.7 7.3 3.1 7.8c.4.5 5.3 8.1 12.8 11.3 1.8.8 3.2 1.2 4.3 1.6 1.8.6 3.4.5 4.7.3 1.4-.2 4.4-1.8 5-3.5.6-1.7.6-3.2.4-3.5-.2-.3-.6-.5-1.3-.9z"/>
+        </svg>
+      </div>
+      <div class="app-label">WhatsApp</div>
+      <div class="badge">7</div>
+    </a>
+  </div>
+
+  <!-- Gesture bar -->
+  <div class="gesture-bar">
+    <div class="gesture-pill"></div>
+  </div>
+
+<script>
+  function pad(n){ return n<10 ? '0'+n : n; }
+  const giorni = ['domenica','lunedì','martedì','mercoledì','giovedì','venerdì','sabato'];
+  const mesi = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+
+  function tick(){
+    const d = new Date();
+    const t = pad(d.getHours()) + ':' + pad(d.getMinutes());
+    document.getElementById('clock').textContent = t;
+    document.getElementById('sb-time').textContent = t;
+    document.getElementById('date').textContent =
+      giorni[d.getDay()] + ', ' + d.getDate() + ' ' + mesi[d.getMonth()];
+  }
+  tick();
+  setInterval(tick, 10000);
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(function(){});
+}
+</script>
+</body>
+</html>
